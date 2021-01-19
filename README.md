@@ -1,3 +1,3 @@
 # face-mask-detection
 
-![](cnn.png)
+![](images/cnn.png)
