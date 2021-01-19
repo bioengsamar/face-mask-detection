@@ -30,4 +30,4 @@ d2_test_dataset = X_test.reshape((nsamples,nx*ny*nz))
 y_pred=model.predict(d2_test_dataset)
 
 accuracy= model.score(d2_test_dataset ,y_test)
-print('Model accuracy is: ', accuracy)
+print('Model accuracy is: ', accuracy) #0.8913043478260869
