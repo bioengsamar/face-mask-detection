@@ -1,6 +1,7 @@
 import pickle
 from sklearn import svm
 from sklearn.model_selection import train_test_split
+import numpy as np
 
 
 def load_data(x, y):
@@ -12,6 +13,7 @@ def load_data(x, y):
     return d2_dataset, y
 
 def model(X_train, X_test, y_train, y_tes):
+    global model
     model = svm.SVC()
     model.fit(X_train,y_train)
     accuracy= model.score(X_test ,y_test)
@@ -30,7 +32,8 @@ if __name__ == '__main__':
     import cv2
 
 
-
-
-    image = cv2.imread('image/40.jpg',cv2.IMREAD_GRAYSCALE)
-    model.predict(image)
+    image = cv2.imread('image/44.jpg',cv2.IMREAD_GRAYSCALE)
+    roi = cv2.resize(image, (100, 100))
+    feature_vector = np.reshape(roi, (100*100))
+    print(model.predict(feature_vector.reshape(1,-1)))
+    #print(feature_vector.reshape(-1,1))
