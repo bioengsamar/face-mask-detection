@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import os
 import cv2
 from tqdm import tqdm
@@ -22,8 +22,8 @@ for category in CATEGORIES:  # do with_mask and without_mask
         IMG_SIZE = 100
 
         new_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))
-        plt.imshow(new_array, cmap='gray')
-        plt.show()
+        #plt.imshow(new_array, cmap='gray')
+        #plt.show()
 
         break  # we just want one for now so break
     break  #...and one more!
