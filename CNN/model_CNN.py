@@ -17,8 +17,9 @@ class face_mask_detection_Model(object):
     def predict_class(self, img):
         self.preds = self.loaded_model.predict(img)
         print(self.preds)
-        if self.preds >= 0.5:
+        return self.preds
+        #if self.preds >= 0.2:
             
-            return face_mask_detection_Model.classes_LIST[1]
-        else:
-            return face_mask_detection_Model.classes_LIST[0]
+            #return face_mask_detection_Model.classes_LIST[1]
+        #else:
+            #return face_mask_detection_Model.classes_LIST[0]

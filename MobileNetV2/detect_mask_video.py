@@ -21,6 +21,12 @@ ap.add_argument("-m", "--model", type=str,
 	help="path to trained face mask detector model")
 ap.add_argument("-c", "--confidence", type=float, default=0.5,
 	help="minimum probability to filter weak detections")
+#ap.add_argument("-o", "--output", required=True,
+	#help="path to output video file")
+#ap.add_argument("-f", "--fps", type=int, default=20,
+	#help="FPS of output video")
+#ap.add_argument("-c", "--codec", type=str, default="MJPG",
+	#help="codec of output video")
 args = vars(ap.parse_args())
 
 def detect_and_predict_mask(frame, faceNet, maskNet):
@@ -93,12 +99,33 @@ maskNet = load_model(args["model"])
 print("[INFO] starting video stream...")
 vs = VideoStream(src=0).start()
 time.sleep(2.0)
+print("[INFO] saving video stream...")
+
+# initialize the FourCC, video writer, dimensions of the frame, and
+# zeros array
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+writer = None
+(h, w) = (None, None)
+zeros = None
+
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it
 	# to have a maximum width of 400 pixels
 	frame = vs.read()
 	frame = imutils.resize(frame, width=400)
+    # check if the writer is None
+	if writer is None:
+		# store the image dimensions, initialize the video writer,
+		# and construct the zeros array
+		(h, w) = frame.shape[:2]
+		writer = cv2.VideoWriter('example.mp4', fourcc,20.0,
+			(w * 2, h * 2), True)
+		zeros = np.zeros((h, w), dtype="uint8")
+	output = np.zeros((h * 2, w * 2, 3), dtype="uint8")
+	output = frame
+	# write the output frame to file
+	writer.write(output)
 	# detect faces in the frame and determine if they are wearing a
 	# face mask or not
 	(locs, preds) = detect_and_predict_mask(frame, faceNet, maskNet)
@@ -121,10 +148,16 @@ while True:
 		cv2.rectangle(frame, (startX, startY), (endX, endY), color, 2)
         # show the output frame
 	cv2.imshow("Frame", frame)
+	#writer.write(frame)
+	cv2.imshow("Output", output)
 	key = cv2.waitKey(1) & 0xFF
 	# if the `q` key was pressed, break from the loop
 	if key == ord("q"):
 		break
 # do a bit of cleanup
+
+# Release everything if job is finished
+print("[INFO] cleaning up...")
 cv2.destroyAllWindows()
 vs.stop()
+writer.release()
