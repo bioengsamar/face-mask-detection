@@ -13,7 +13,7 @@ from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.keras.utils import to_categorical
 from sklearn.preprocessing import LabelBinarizer
-from sklearn.model_selection import train_test_split
+#from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 #from imutils import paths
 #import matplotlib.pyplot as plt
@@ -81,8 +81,16 @@ labels = lb.fit_transform(labels)
 labels = to_categorical(labels)
 # partition the data into training and testing splits using 80% of
 # the data for training and the remaining 20% for testing
-(trainX, testX, trainY, testY) = train_test_split(data, labels,
-	test_size=0.20, stratify=labels, random_state=42)
+#(trainX, testX, trainY, testY) = train_test_split(data, labels,test_size=0.20, stratify=labels, random_state=42)
+trainX=[]
+trainY=[]
+testX=[]
+testY=[]
+train_size =int(0.8 * len(data)) 
+trainX.append(data[0:train_size,:])
+trainY.append(labels[0:train_size,:])
+testX.append(data[train_size:len(data),:])
+testY.append(labels[train_size:len(data),:])
 # construct the training image generator for data augmentation
 aug = ImageDataGenerator(
 	rotation_range=20,
